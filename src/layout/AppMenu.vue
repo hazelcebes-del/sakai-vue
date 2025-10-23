@@ -68,44 +68,44 @@ const model = ref([
                     // eslint-disable-next-line prettier/prettier
                     {
                         label: 'Packages',
-                        icon: 'pi pi-fw pi-sign-in',
+                        icon: 'pi pi-fw pi-box',
                         to: '/auth/login'
                     },
                     {
                         label: 'Specialize Pricing Rule',
-                        icon: 'pi pi-fw pi-times-circle',
+                        icon: 'pi pi-fw pi-percentage',
                         to: '/auth/error'
                     },
                     {
                         label: 'Services Pricing Rule',
-                        icon: 'pi pi-fw pi-lock',
+                        icon: 'pi pi-fw pi-tags',
                         to: '/auth/access'
                     }
                 ]
             },
             {
                 label: 'Configuration',
-                icon: 'pi pi-fw pi-dollar',
+                icon: 'pi pi-fw pi-cog',
                 items: [
                     // eslint-disable-next-line prettier/prettier
                     {
                         label: 'Areas',
-                        icon: 'pi pi-fw pi-sign-in',
+                        icon: 'pi pi-fw pi-map',
                         to: '/uikit/tableareas'
                     },
                     {
                         label: 'Districts',
-                        icon: 'pi pi-fw pi-times-circle',
+                        icon: 'pi pi-fw pi-compass',
                         to: '/uikit/tabledistricts'
                     },
                     {
                         label: 'Properties',
-                        icon: 'pi pi-fw pi-lock',
+                        icon: 'pi pi-fw pi-home',
                         to: '/uikit/tableproperties'
                     },
                     {
                         label: 'Residence Types',
-                        icon: 'pi pi-fw pi-lock',
+                        icon: 'pi pi-fw pi-building',
                         to: '/uikit/tableresidencetypes'
                     }
                 ]
