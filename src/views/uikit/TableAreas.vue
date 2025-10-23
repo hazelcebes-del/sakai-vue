@@ -5,6 +5,8 @@ import Column from 'primevue/column';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
+import ConfirmDialog from 'primevue/confirmdialog';
+import { useConfirm } from 'primevue/useconfirm';
 
 // =======================
 // DATA DUMMY (hardcode)
@@ -26,26 +28,56 @@ const areas = ref([
 // STATE DAN LOGIC
 // =======================
 const addDialogVisible = ref(false);
+const dialogMode = ref('add'); // 'add' | 'edit'
+const confirm = useConfirm();
 
 const newArea = ref({
+    id: null,
     name: '',
     latitude: '',
     longitude: ''
 });
 
 function openAddDialog() {
+    dialogMode.value = 'add';
     newArea.value = { name: '', latitude: '', longitude: '' };
     addDialogVisible.value = true;
 }
 
-function addArea() {
-    if (newArea.value.name && newArea.value.latitude && newArea.value.longitude) {
+function openEditDialog(area) {
+    dialogMode.value = 'edit';
+    newArea.value = { ...area };
+    addDialogVisible.value = true;
+}
+
+function saveArea() {
+    if (!newArea.value.name || !newArea.value.latitude || !newArea.value.longitude) return;
+
+    if (dialogMode.value === 'add') {
         areas.value.push({
             id: areas.value.length + 1,
             ...newArea.value
         });
-        addDialogVisible.value = false;
+    } else if (dialogMode.value === 'edit') {
+        const index = areas.value.findIndex((a) => a.id === newArea.value.id);
+        if (index !== -1) {
+            areas.value[index] = { ...newArea.value };
+        }
     }
+
+    addDialogVisible.value = false;
+}
+
+function confirmDelete(areaId) {
+    confirm.require({
+        message: 'Are you sure you want to delete this area?',
+        header: 'Confirm Deletion',
+        icon: 'pi pi-exclamation-triangle',
+        acceptClass: 'p-button-danger',
+        accept: () => {
+            deleteArea(areaId);
+        }
+    });
 }
 
 function deleteArea(areaId) {
@@ -68,16 +100,21 @@ function deleteArea(areaId) {
             <Column header="Actions" style="min-width: 8rem">
                 <template #body="{ data }">
                     <div class="flex gap-2">
-                        <Button icon="pi pi-pencil" text severity="info" />
-                        <Button icon="pi pi-trash" text severity="danger" @click="deleteArea(data.id)" />
+                        <Button icon="pi pi-pencil" text severity="info" @click="openEditDialog(data)" />
+                        <Button icon="pi pi-trash" text severity="danger" @click="confirmDelete(data.id)" />
                     </div>
                 </template>
             </Column>
         </DataTable>
     </div>
 
-    <!-- Add Dialog -->
-    <Dialog v-model:visible="addDialogVisible" modal header="Add Area" :style="{ width: '25rem' }">
+    <!-- Add/Edit Dialog -->
+    <Dialog
+        v-model:visible="addDialogVisible"
+        modal
+        :header="dialogMode === 'add' ? 'Add Area' : 'Edit Area'"
+        :style="{ width: '25rem' }"
+    >
         <div class="flex flex-col gap-3 mt-3">
             <div class="flex flex-col gap-2">
                 <label class="font-medium">Area Name</label>
@@ -98,10 +135,13 @@ function deleteArea(areaId) {
         <template #footer>
             <div class="flex justify-end gap-2">
                 <Button label="Cancel" text @click="addDialogVisible = false" />
-                <Button label="Add" @click="addArea" />
+                <Button :label="dialogMode === 'add' ? 'Add' : 'Save'" @click="saveArea" />
             </div>
         </template>
     </Dialog>
+
+    <!-- Confirm Dialog -->
+    <ConfirmDialog />
 </template>
 
 <style scoped lang="scss">

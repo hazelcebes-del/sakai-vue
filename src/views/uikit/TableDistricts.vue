@@ -6,6 +6,8 @@ import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
 import Dropdown from 'primevue/dropdown';
+import ConfirmDialog from 'primevue/confirmdialog';
+import { useConfirm } from 'primevue/useconfirm';
 
 // =======================
 // DUMMY DATA AREA UNTUK DROPDOWN
@@ -32,8 +34,11 @@ const districts = ref([
 // STATE DAN LOGIC
 // =======================
 const addDialogVisible = ref(false);
+const dialogMode = ref('add'); // 'add' | 'edit'
+const confirm = useConfirm();
 
 const newDistrict = ref({
+    id: null,
     area: null,
     name: '',
     latitude: '',
@@ -41,24 +46,55 @@ const newDistrict = ref({
 });
 
 function openAddDialog() {
+    dialogMode.value = 'add';
     newDistrict.value = { area: null, name: '', latitude: '', longitude: '' };
     addDialogVisible.value = true;
 }
 
-function addDistrict() {
+function openEditDialog(district) {
+    dialogMode.value = 'edit';
+    newDistrict.value = { ...district };
+    addDialogVisible.value = true;
+}
+
+function saveDistrict() {
     if (
-        newDistrict.value.area &&
-        newDistrict.value.name &&
-        newDistrict.value.latitude &&
-        newDistrict.value.longitude
-    ) {
+        !newDistrict.value.area ||
+        !newDistrict.value.name ||
+        !newDistrict.value.latitude ||
+        !newDistrict.value.longitude
+    )
+        return;
+
+    if (dialogMode.value === 'add') {
         districts.value.push({
             id: districts.value.length + 1,
             ...newDistrict.value,
             areaName: newDistrict.value.area.name
         });
-        addDialogVisible.value = false;
+    } else if (dialogMode.value === 'edit') {
+        const index = districts.value.findIndex((d) => d.id === newDistrict.value.id);
+        if (index !== -1) {
+            districts.value[index] = {
+                ...newDistrict.value,
+                areaName: newDistrict.value.area.name
+            };
+        }
     }
+
+    addDialogVisible.value = false;
+}
+
+function confirmDelete(id) {
+    confirm.require({
+        message: 'Are you sure you want to delete this district?',
+        header: 'Confirm Deletion',
+        icon: 'pi pi-exclamation-triangle',
+        acceptClass: 'p-button-danger',
+        accept: () => {
+            deleteDistrict(id);
+        }
+    });
 }
 
 function deleteDistrict(id) {
@@ -82,16 +118,21 @@ function deleteDistrict(id) {
             <Column header="Actions" style="min-width: 8rem">
                 <template #body="{ data }">
                     <div class="flex gap-2">
-                        <Button icon="pi pi-pencil" text severity="info" />
-                        <Button icon="pi pi-trash" text severity="danger" @click="deleteDistrict(data.id)" />
+                        <Button icon="pi pi-pencil" text severity="info" @click="openEditDialog(data)" />
+                        <Button icon="pi pi-trash" text severity="danger" @click="confirmDelete(data.id)" />
                     </div>
                 </template>
             </Column>
         </DataTable>
     </div>
 
-    <!-- Add Dialog -->
-    <Dialog v-model:visible="addDialogVisible" modal header="Add District" :style="{ width: '25rem' }">
+    <!-- Add/Edit Dialog -->
+    <Dialog
+        v-model:visible="addDialogVisible"
+        modal
+        :header="dialogMode === 'add' ? 'Add District' : 'Edit District'"
+        :style="{ width: '25rem' }"
+    >
         <div class="flex flex-col gap-3 mt-3">
             <div class="flex flex-col gap-2">
                 <label class="font-medium">Area</label>
@@ -122,10 +163,13 @@ function deleteDistrict(id) {
         <template #footer>
             <div class="flex justify-end gap-2">
                 <Button label="Cancel" text @click="addDialogVisible = false" />
-                <Button label="Add" @click="addDistrict" />
+                <Button :label="dialogMode === 'add' ? 'Add' : 'Save'" @click="saveDistrict" />
             </div>
         </template>
     </Dialog>
+
+    <!-- Confirm Dialog -->
+    <ConfirmDialog />
 </template>
 
 <style scoped lang="scss">

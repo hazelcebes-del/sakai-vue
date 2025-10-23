@@ -6,6 +6,8 @@ import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
 import Dropdown from 'primevue/dropdown';
+import ConfirmDialog from 'primevue/confirmdialog';
+import { useConfirm } from 'primevue/useconfirm';
 
 // =======================
 // DUMMY DATA DISTRICT UNTUK DROPDOWN
@@ -35,8 +37,11 @@ const properties = ref([
 // STATE & LOGIC
 // =======================
 const addDialogVisible = ref(false);
+const dialogMode = ref('add'); // 'add' | 'edit'
+const confirm = useConfirm();
 
 const newProperty = ref({
+    id: null,
     district: null,
     name: '',
     latitude: '',
@@ -44,17 +49,34 @@ const newProperty = ref({
 });
 
 function openAddDialog() {
+    dialogMode.value = 'add';
     newProperty.value = { district: null, name: '', latitude: '', longitude: '' };
     addDialogVisible.value = true;
 }
 
-function addProperty() {
+function openEditDialog(property) {
+    dialogMode.value = 'edit';
+    const districtObj = districts.value.find((d) => d.name === property.districtName) || null;
+    newProperty.value = {
+        id: property.id,
+        district: districtObj,
+        name: property.name,
+        latitude: property.latitude,
+        longitude: property.longitude
+    };
+    addDialogVisible.value = true;
+}
+
+function saveProperty() {
     if (
-        newProperty.value.district &&
-        newProperty.value.name &&
-        newProperty.value.latitude &&
-        newProperty.value.longitude
-    ) {
+        !newProperty.value.district ||
+        !newProperty.value.name ||
+        !newProperty.value.latitude ||
+        !newProperty.value.longitude
+    )
+        return;
+
+    if (dialogMode.value === 'add') {
         properties.value.push({
             id: properties.value.length + 1,
             districtName: newProperty.value.district.name,
@@ -62,8 +84,32 @@ function addProperty() {
             latitude: newProperty.value.latitude,
             longitude: newProperty.value.longitude
         });
-        addDialogVisible.value = false;
+    } else if (dialogMode.value === 'edit') {
+        const index = properties.value.findIndex((p) => p.id === newProperty.value.id);
+        if (index !== -1) {
+            properties.value[index] = {
+                id: newProperty.value.id,
+                districtName: newProperty.value.district.name,
+                name: newProperty.value.name,
+                latitude: newProperty.value.latitude,
+                longitude: newProperty.value.longitude
+            };
+        }
     }
+
+    addDialogVisible.value = false;
+}
+
+function confirmDelete(id) {
+    confirm.require({
+        message: 'Are you sure you want to delete this property?',
+        header: 'Confirm Deletion',
+        icon: 'pi pi-exclamation-triangle',
+        acceptClass: 'p-button-danger',
+        accept: () => {
+            deleteProperty(id);
+        }
+    });
 }
 
 function deleteProperty(id) {
@@ -87,16 +133,21 @@ function deleteProperty(id) {
             <Column header="Actions" style="min-width: 8rem">
                 <template #body="{ data }">
                     <div class="flex gap-2">
-                        <Button icon="pi pi-pencil" text severity="info" />
-                        <Button icon="pi pi-trash" text severity="danger" @click="deleteProperty(data.id)" />
+                        <Button icon="pi pi-pencil" text severity="info" @click="openEditDialog(data)" />
+                        <Button icon="pi pi-trash" text severity="danger" @click="confirmDelete(data.id)" />
                     </div>
                 </template>
             </Column>
         </DataTable>
     </div>
 
-    <!-- Add Property Dialog -->
-    <Dialog v-model:visible="addDialogVisible" modal header="Add Property" :style="{ width: '25rem' }">
+    <!-- Add/Edit Property Dialog -->
+    <Dialog
+        v-model:visible="addDialogVisible"
+        modal
+        :header="dialogMode === 'add' ? 'Add Property' : 'Edit Property'"
+        :style="{ width: '25rem' }"
+    >
         <div class="flex flex-col gap-3 mt-3">
             <div class="flex flex-col gap-2">
                 <label class="font-medium">District</label>
@@ -127,10 +178,13 @@ function deleteProperty(id) {
         <template #footer>
             <div class="flex justify-end gap-2">
                 <Button label="Cancel" text @click="addDialogVisible = false" />
-                <Button label="Add" @click="addProperty" />
+                <Button :label="dialogMode === 'add' ? 'Add' : 'Save'" @click="saveProperty" />
             </div>
         </template>
     </Dialog>
+
+    <!-- Confirm Dialog -->
+    <ConfirmDialog />
 </template>
 
 <style scoped lang="scss">

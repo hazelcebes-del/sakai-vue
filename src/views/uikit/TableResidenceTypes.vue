@@ -6,8 +6,12 @@ import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
 import Textarea from 'primevue/textarea';
+import ConfirmDialog from 'primevue/confirmdialog';
+import { useConfirm } from 'primevue/useconfirm';
 
-// Data residence type (isi data dummy langsung di sini)
+// =======================
+// DATA DUMMY (hardcode)
+// =======================
 const residenceTypes = ref([
     {
         id: 1,
@@ -36,27 +40,60 @@ const residenceTypes = ref([
     }
 ]);
 
+// =======================
+// STATE & LOGIC
+// =======================
 const addDialogVisible = ref(false);
+const dialogMode = ref('add'); // 'add' | 'edit'
+const confirm = useConfirm();
 
 const newResidenceType = ref({
+    id: null,
     name: '',
     description: ''
 });
 
 function openAddDialog() {
-    newResidenceType.value = { name: '', description: '' };
+    dialogMode.value = 'add';
+    newResidenceType.value = { id: null, name: '', description: '' };
     addDialogVisible.value = true;
 }
 
-function addResidenceType() {
-    if (newResidenceType.value.name && newResidenceType.value.description) {
+function openEditDialog(residence) {
+    dialogMode.value = 'edit';
+    newResidenceType.value = { ...residence };
+    addDialogVisible.value = true;
+}
+
+function saveResidenceType() {
+    if (!newResidenceType.value.name || !newResidenceType.value.description) return;
+
+    if (dialogMode.value === 'add') {
         residenceTypes.value.push({
             id: residenceTypes.value.length + 1,
             name: newResidenceType.value.name,
             description: newResidenceType.value.description
         });
-        addDialogVisible.value = false;
+    } else if (dialogMode.value === 'edit') {
+        const index = residenceTypes.value.findIndex((r) => r.id === newResidenceType.value.id);
+        if (index !== -1) {
+            residenceTypes.value[index] = { ...newResidenceType.value };
+        }
     }
+
+    addDialogVisible.value = false;
+}
+
+function confirmDelete(id) {
+    confirm.require({
+        message: 'Are you sure you want to delete this residence type?',
+        header: 'Confirm Deletion',
+        icon: 'pi pi-exclamation-triangle',
+        acceptClass: 'p-button-danger',
+        accept: () => {
+            deleteResidenceType(id);
+        }
+    });
 }
 
 function deleteResidenceType(id) {
@@ -73,21 +110,28 @@ function deleteResidenceType(id) {
 
         <DataTable :value="residenceTypes" dataKey="id" showGridlines :rows="10" :paginator="true">
             <template #empty>No residence types found.</template>
+
             <Column field="name" header="Residence Type Name" style="min-width: 14rem"></Column>
             <Column field="description" header="Description" style="min-width: 20rem"></Column>
+
             <Column header="Actions" style="min-width: 8rem">
                 <template #body="{ data }">
                     <div class="flex gap-2">
-                        <Button icon="pi pi-pencil" text severity="info" />
-                        <Button icon="pi pi-trash" text severity="danger" @click="deleteResidenceType(data.id)" />
+                        <Button icon="pi pi-pencil" text severity="info" @click="openEditDialog(data)" />
+                        <Button icon="pi pi-trash" text severity="danger" @click="confirmDelete(data.id)" />
                     </div>
                 </template>
             </Column>
         </DataTable>
     </div>
 
-    <!-- Add Residence Type Dialog -->
-    <Dialog v-model:visible="addDialogVisible" modal header="Add Residence Type" :style="{ width: '25rem' }">
+    <!-- Add/Edit Dialog -->
+    <Dialog
+        v-model:visible="addDialogVisible"
+        modal
+        :header="dialogMode === 'add' ? 'Add Residence Type' : 'Edit Residence Type'"
+        :style="{ width: '25rem' }"
+    >
         <div class="flex flex-col gap-3 mt-3">
             <div class="flex flex-col gap-2">
                 <label class="font-medium">Residence Type Name</label>
@@ -103,10 +147,13 @@ function deleteResidenceType(id) {
         <template #footer>
             <div class="flex justify-end gap-2">
                 <Button label="Cancel" text @click="addDialogVisible = false" />
-                <Button label="Add" @click="addResidenceType" />
+                <Button :label="dialogMode === 'add' ? 'Add' : 'Save'" @click="saveResidenceType" />
             </div>
         </template>
     </Dialog>
+
+    <!-- Confirm Dialog -->
+    <ConfirmDialog />
 </template>
 
 <style scoped lang="scss">
