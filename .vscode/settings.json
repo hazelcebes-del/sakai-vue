@@ -19,5 +19,11 @@
     "[json]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode",
         "editor.formatOnSave": true
-    }
+    },
+
+    // 🔽 Tambahkan mulai dari sini untuk menonaktifkan tampilan "Delete", "15 months ago", dll
+    "gitlens.currentLine.enabled": false,
+    "gitlens.hovers.enabled": false,
+    "gitlens.codeLens.enabled": false,
+    "editor.codeLens": false
 }

@@ -60,6 +60,28 @@ const model = ref([
                 ]
             },
             {
+                label: 'Price Management',
+                icon: 'pi pi-fw pi-dollar',
+                items: [
+                    {
+                        label: 'Packages',
+                        icon: 'pi pi-fw pi-sign-in',
+                        to: '/auth/login'
+                    },
+                    {
+                        label: 'Specialize Pricing Rule',
+                        icon: 'pi pi-fw pi-times-circle',
+                        to: '/auth/error'
+                    },
+                    {
+                        label: 'Services Pricing Rule',
+                        icon: 'pi pi-fw pi-lock',
+                        to: '/auth/access'
+                    }
+                ]
+            },
+
+            {
                 label: 'Crud',
                 icon: 'pi pi-fw pi-pencil',
                 to: '/pages/crud'
