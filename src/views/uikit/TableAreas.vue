@@ -92,7 +92,7 @@ function deleteArea(areaId) {
             <Button label="Add Area" icon="pi pi-plus" @click="openAddDialog" />
         </div>
 
-        <DataTable :value="areas" dataKey="id" showGridlines :rows="10" :paginator="true">
+        <DataTable :value="areas" dataKey="id" showGridlines :rows="10" :paginator="true" :rowsPerPageOptions="[5, 10, 20, 50]">
             <template #empty>No areas found.</template>
             <Column field="name" header="Area Name" style="min-width: 14rem"></Column>
             <Column field="latitude" header="Latitude" style="min-width: 10rem"></Column>

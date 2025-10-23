@@ -109,7 +109,7 @@ function deleteDistrict(id) {
             <Button label="Add District" icon="pi pi-plus" @click="openAddDialog" />
         </div>
 
-        <DataTable :value="districts" dataKey="id" showGridlines :rows="10" :paginator="true">
+        <DataTable :value="districts" dataKey="id" showGridlines :rows="10" :paginator="true" :rowsPerPageOptions="[5, 10, 20, 50]">
             <template #empty>No districts found.</template>
             <Column field="areaName" header="Area" style="min-width: 10rem"></Column>
             <Column field="name" header="District Name" style="min-width: 14rem"></Column>

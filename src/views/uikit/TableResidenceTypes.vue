@@ -108,7 +108,7 @@ function deleteResidenceType(id) {
             <Button label="Add Residence Type" icon="pi pi-plus" @click="openAddDialog" />
         </div>
 
-        <DataTable :value="residenceTypes" dataKey="id" showGridlines :rows="10" :paginator="true">
+        <DataTable :value="residenceTypes" dataKey="id" showGridlines :rows="10" :paginator="true" :rowsPerPageOptions="[5, 10, 20, 50]">
             <template #empty>No residence types found.</template>
 
             <Column field="name" header="Residence Type Name" style="min-width: 14rem"></Column>

@@ -124,7 +124,7 @@ function deleteProperty(id) {
             <Button label="Add Property" icon="pi pi-plus" @click="openAddDialog" />
         </div>
 
-        <DataTable :value="properties" dataKey="id" showGridlines :rows="10" :paginator="true">
+        <DataTable :value="properties" dataKey="id" showGridlines :rows="10" :paginator="true" :rowsPerPageOptions="[5, 10, 20, 50]">
             <template #empty>No properties found.</template>
             <Column field="districtName" header="District" style="min-width: 12rem"></Column>
             <Column field="name" header="Property Name" style="min-width: 14rem"></Column>
