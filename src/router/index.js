@@ -90,6 +90,29 @@ const router = createRouter({
                     component: () => import('@/views/uikit/TimelineDoc.vue')
                 },
                 {
+                    path: '/uikit/tableareas',
+                    name: 'tableareas',
+                    component: () => import('@/views/uikit/TableAreas.vue')
+                },
+                {
+                    path: '/uikit/tabledistricts',
+                    name: 'tabledistricts',
+                    component: () => import('@/views/uikit/TableDistricts.vue')
+                },
+                {
+                    path: '/uikit/tableproperties',
+                    name: 'tableproperties',
+                    component: () => import('@/views/uikit/TableProperties.vue')
+                },
+                {
+                    path: '/uikit/tableresidencetypes',
+                    name: 'tableresidencetypes',
+                    component: () => import('@/views/uikit/TableResidenceTypes.vue')
+                },
+
+
+
+                {
                     path: '/pages/empty',
                     name: 'empty',
                     component: () => import('@/views/pages/Empty.vue')

@@ -25,5 +25,7 @@
     "gitlens.currentLine.enabled": false,
     "gitlens.hovers.enabled": false,
     "gitlens.codeLens.enabled": false,
-    "editor.codeLens": false
+    "editor.codeLens": false,
+    "workbench.editor.enablePreview": false,
+    "editor.rename.enablePreview": false
 }

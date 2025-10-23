@@ -63,6 +63,7 @@ const model = ref([
                 label: 'Price Management',
                 icon: 'pi pi-fw pi-dollar',
                 items: [
+                    // eslint-disable-next-line prettier/prettier
                     {
                         label: 'Packages',
                         icon: 'pi pi-fw pi-sign-in',
@@ -77,6 +78,33 @@ const model = ref([
                         label: 'Services Pricing Rule',
                         icon: 'pi pi-fw pi-lock',
                         to: '/auth/access'
+                    }
+                ]
+            },
+            {
+                label: 'Configuration',
+                icon: 'pi pi-fw pi-dollar',
+                items: [
+                    // eslint-disable-next-line prettier/prettier
+                    {
+                        label: 'Areas',
+                        icon: 'pi pi-fw pi-sign-in',
+                        to: '/uikit/tableareas'
+                    },
+                    {
+                        label: 'Districts',
+                        icon: 'pi pi-fw pi-times-circle',
+                        to: '/uikit/tabledistricts'
+                    },
+                    {
+                        label: 'Properties',
+                        icon: 'pi pi-fw pi-lock',
+                        to: '/uikit/tableproperties'
+                    },
+                    {
+                        label: 'Residence Types',
+                        icon: 'pi pi-fw pi-lock',
+                        to: '/uikit/tableresidencetypes'
                     }
                 ]
             },
