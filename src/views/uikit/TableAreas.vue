@@ -6,7 +6,25 @@ import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
 
-const areas = ref([]);
+// =======================
+// DATA DUMMY (hardcode)
+// =======================
+const areas = ref([
+    { id: 1, name: 'Central Park', latitude: '-6.1751', longitude: '106.8650' },
+    { id: 2, name: 'Downtown Area', latitude: '-6.2000', longitude: '106.8167' },
+    { id: 3, name: 'Harbor District', latitude: '-6.1214', longitude: '106.7741' },
+    { id: 4, name: 'Industrial Zone', latitude: '-6.1100', longitude: '106.8700' },
+    { id: 5, name: 'Residential Area', latitude: '-6.1900', longitude: '106.8451' },
+    { id: 6, name: 'Mountain View', latitude: '-6.2500', longitude: '106.9500' },
+    { id: 7, name: 'Lakeside', latitude: '-6.2100', longitude: '106.8000' },
+    { id: 8, name: 'Business Park', latitude: '-6.1700', longitude: '106.8300' },
+    { id: 9, name: 'University District', latitude: '-6.3600', longitude: '106.8200' },
+    { id: 10, name: 'Airport Area', latitude: '-6.1300', longitude: '106.6550' }
+]);
+
+// =======================
+// STATE DAN LOGIC
+// =======================
 const addDialogVisible = ref(false);
 
 const newArea = ref({

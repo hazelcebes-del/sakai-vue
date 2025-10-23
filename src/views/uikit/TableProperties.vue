@@ -7,7 +7,9 @@ import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
 import Dropdown from 'primevue/dropdown';
 
-// Dummy data district untuk dropdown
+// =======================
+// DUMMY DATA DISTRICT UNTUK DROPDOWN
+// =======================
 const districts = ref([
     { id: 1, name: 'Abraj Quartier' },
     { id: 2, name: 'Doha City' },
@@ -15,8 +17,23 @@ const districts = ref([
     { id: 4, name: 'Lusail Marina' }
 ]);
 
-// Data properti
-const properties = ref([]);
+// =======================
+// DUMMY DATA PROPERTIES (hardcode)
+// =======================
+const properties = ref([
+    { id: 1, districtName: 'Abraj Quartier', name: 'Tower 1', latitude: '25.3667', longitude: '51.5333' },
+    { id: 2, districtName: 'Abraj Quartier', name: 'Tower 2', latitude: '25.3672', longitude: '51.5340' },
+    { id: 3, districtName: 'Doha City', name: 'City Center Mall', latitude: '25.3240', longitude: '51.5310' },
+    { id: 4, districtName: 'Doha City', name: 'The Gate Mall', latitude: '25.3245', longitude: '51.5300' },
+    { id: 5, districtName: 'The Pearl', name: 'Porto Arabia 10', latitude: '25.3730', longitude: '51.5405' },
+    { id: 6, districtName: 'The Pearl', name: 'Qanat Quartier 3', latitude: '25.3775', longitude: '51.5430' },
+    { id: 7, districtName: 'Lusail Marina', name: 'Crescent Tower A', latitude: '25.4200', longitude: '51.5360' },
+    { id: 8, districtName: 'Lusail Marina', name: 'Lusail Tower', latitude: '25.4250', longitude: '51.5400' }
+]);
+
+// =======================
+// STATE & LOGIC
+// =======================
 const addDialogVisible = ref(false);
 
 const newProperty = ref({

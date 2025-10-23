@@ -7,14 +7,30 @@ import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
 import Dropdown from 'primevue/dropdown';
 
-// Dummy data area untuk dropdown
+// =======================
+// DUMMY DATA AREA UNTUK DROPDOWN
+// =======================
 const areas = ref([
     { id: 1, name: 'Doha City' },
     { id: 2, name: 'Al Rayyan' },
     { id: 3, name: 'Lusail' }
 ]);
 
-const districts = ref([]);
+// =======================
+// DUMMY DATA DISTRICTS (hardcode)
+// =======================
+const districts = ref([
+    { id: 1, area: { id: 1, name: 'Doha City' }, areaName: 'Doha City', name: 'West Bay', latitude: '25.3200', longitude: '51.5200' },
+    { id: 2, area: { id: 1, name: 'Doha City' }, areaName: 'Doha City', name: 'Old Airport', latitude: '25.2600', longitude: '51.5500' },
+    { id: 3, area: { id: 2, name: 'Al Rayyan' }, areaName: 'Al Rayyan', name: 'Education City', latitude: '25.3150', longitude: '51.4330' },
+    { id: 4, area: { id: 2, name: 'Al Rayyan' }, areaName: 'Al Rayyan', name: 'Al Gharrafa', latitude: '25.3500', longitude: '51.4660' },
+    { id: 5, area: { id: 3, name: 'Lusail' }, areaName: 'Lusail', name: 'Marina District', latitude: '25.4200', longitude: '51.5300' },
+    { id: 6, area: { id: 3, name: 'Lusail' }, areaName: 'Lusail', name: 'Fox Hills', latitude: '25.4050', longitude: '51.5100' }
+]);
+
+// =======================
+// STATE DAN LOGIC
+// =======================
 const addDialogVisible = ref(false);
 
 const newDistrict = ref({

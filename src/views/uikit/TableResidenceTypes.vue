@@ -7,8 +7,35 @@ import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
 import Textarea from 'primevue/textarea';
 
-// Data residence type
-const residenceTypes = ref([]);
+// Data residence type (isi data dummy langsung di sini)
+const residenceTypes = ref([
+    {
+        id: 1,
+        name: 'Apartment',
+        description: 'A self-contained housing unit that occupies part of a building.'
+    },
+    {
+        id: 2,
+        name: 'Condominium',
+        description: 'Privately owned unit in a shared property with shared facilities.'
+    },
+    {
+        id: 3,
+        name: 'Villa',
+        description: 'A large, luxurious house often found in resort or suburban areas.'
+    },
+    {
+        id: 4,
+        name: 'Dormitory',
+        description: 'Shared housing often used for students or workers.'
+    },
+    {
+        id: 5,
+        name: 'Townhouse',
+        description: 'A multi-floor home that shares one or more walls with adjacent properties.'
+    }
+]);
+
 const addDialogVisible = ref(false);
 
 const newResidenceType = ref({
